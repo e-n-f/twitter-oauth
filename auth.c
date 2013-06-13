@@ -24,7 +24,8 @@ int main(int argc, char **argv) {
 
 	// Can't just use oauth_split_url_parameters() because it loses the last one (?!?)
 
-	for (char *s = sig; *s; s++) {
+	char *s;
+	for (s = sig; *s; s++) {
 		if (*s == '?' || *s == '&') {
 			if (strncmp(s + 1, "oauth_", 6) == 0) {
 				printf("%s", separator);
