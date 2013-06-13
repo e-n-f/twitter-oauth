@@ -4,31 +4,6 @@
 #include <time.h>
 #include <sys/time.h>
 #include <oauth.h>
-#include <openssl/hmac.h>
-
-#if 0
-// https://dev.twitter.com/docs/auth/percent-encoding-parameters
-void percentencode(char *src, char *dest) {
-	while (*src != '\0') {
-		if ((*src >= '0' && *src <= '9') ||
-		    (*src >= 'A' && *src <= 'Z') ||
-		    (*src >= 'a' && *src <= 'z') ||
-		    *src == '-' ||
-		    *src == '.' ||
-		    *src == '_' ||
-		    *src == '~') {
-			*dest++ = *src++;
-		} else {
-			*dest++ = '%';
-			*dest++ = "0123456789ABCDEF"[*src / 16];
-			*dest++ = "0123456789ABCDEF"[*src % 16];
-			*src++;
-		}
-	}
-
-	*dest = '\0';
-}
-#endif
 
 int main(int argc, char **argv) {
 	if (argc != 6) {
@@ -76,26 +51,4 @@ int main(int argc, char **argv) {
 	}
 
 	putchar('\n');
-
-#if 0
-	struct timeval tv;
-	gettimeofday(&tv, NULL);
-	srand(tv.tv_sec ^ tv.tv_usec);
-
-	char nonce[33];
-	int i;
-	for (i = 0; i < 32; i++) {
-		nonce[i] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"[rand() % 62];
-	}
-	nonce[32] = '\0';
-
-	printf("Authorization: OAuth ");
-	printf("oauth_consumer_key=\"%s\", ", c_key);
-	printf("oauth_nonce=\"%s\", ", nonce);
-	printf("oauth_signature=\"%s\", ", basestring);
-	printf("oauth_signature_method=\"HMAC-SHA1\", ");
-	printf("oauth_timestamp=\"%lld\", ", (long long) tv.tv_sec);
-	printf("oauth_token=\"%s\", ", t_key);
-	printf("oauth_version=\"1.0\"\n");
-#endif
 }
