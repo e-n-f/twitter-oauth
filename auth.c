@@ -31,19 +31,18 @@ void percentencode(char *src, char *dest) {
 #endif
 
 int main(int argc, char **argv) {
-	if (argc != 7) {
-		fprintf(stderr, "Usage: URL consumerkey data consumersecret token tokensecret\n\n", argv[0]);
+	if (argc != 6) {
+		fprintf(stderr, "Usage: URL consumerkey consumersecret token tokensecret\n\n", argv[0]);
 		exit(EXIT_FAILURE);
 	}
 
 	char *url = argv[1];
-	char *data = argv[2];
-	char *c_key = argv[3];
-	char *c_secret = argv[4];
-	char *t_key = argv[5];
-	char *t_secret = argv[6];
+	char *c_key = argv[2];
+	char *c_secret = argv[3];
+	char *t_key = argv[4];
+	char *t_secret = argv[5];
 
-	char *sig = oauth_sign_url2(url, &data, OA_HMAC, "GET", c_key, c_secret, t_key, t_secret);
+	char *sig = oauth_sign_url2(url, NULL, OA_HMAC, "GET", c_key, c_secret, t_key, t_secret);
 
 	printf("%s\n", sig);
 
