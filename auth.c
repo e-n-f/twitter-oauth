@@ -44,31 +44,33 @@ int main(int argc, char **argv) {
 
 	char *sig = oauth_sign_url2(url, NULL, OA_HMAC, "GET", c_key, c_secret, t_key, t_secret);
 
-	printf("%s\n", sig);
-
-	char **oauth_args = NULL;
-	int n = oauth_split_url_parameters(sig, &oauth_args);
-
 	printf("Authorization: OAuth ");
+	int within = 0;
 
-	int i;
-	for (i = 0; i < n; i++) {
-		if (strncmp(oauth_args[i], "oauth_", 6) == 0) {
-			char *cp;
-			for (cp = oauth_args[i]; *cp; cp++) {
-				putchar(*cp);
-				if (*cp == '=') {
-					cp++;
-					break;
+	// Can't just use oauth_split_url_parameters() because it loses the last one (?!?)
+
+	char *s;
+	for (s = sig; *s != '\0'; s++) {
+		if (*s == '?' || *s == '&') {
+			if (strncmp(s + 1, "oauth_", 6) == 0) {
+				if (within) {
+					printf(", ");
 				}
-			}
-			putchar('"');
-			for (; *cp; cp++) {
-				putchar(*cp);
-			}
-			putchar('"');
-			if (i + 1 < n) {
-				printf(", ");
+				within = 1;
+
+				char *cp;
+				for (cp = s + 1; *cp && *cp != '&'; cp++) {
+					putchar(*cp);
+					if (*cp == '=') {
+						cp++;
+						break;
+					}
+				}
+				putchar('"');
+				for (; *cp && *cp != '&'; cp++) {
+					putchar(*cp);
+				}
+				putchar('"');
 			}
 		}
 	}
