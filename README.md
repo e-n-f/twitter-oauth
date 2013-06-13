@@ -3,6 +3,7 @@ twitter-oauth
 
 A tiny program to mangle the authentication URL from
 http://http://liboauth.sourceforge.net/
+(<code>apt-get liboauth-dev</code>)
 into the Authentication header that twitter wants.
 
 If you have set up an account at
