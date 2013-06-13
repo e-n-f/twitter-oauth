@@ -7,7 +7,7 @@
 
 int main(int argc, char **argv) {
 	if (argc != 6) {
-		fprintf(stderr, "Usage: URL consumerkey consumersecret token tokensecret\n\n", argv[0]);
+		fprintf(stderr, "Usage: %s URL consumerkey consumersecret token tokensecret\n\n", argv[0]);
 		exit(EXIT_FAILURE);
 	}
 
@@ -51,4 +51,5 @@ int main(int argc, char **argv) {
 	}
 
 	putchar('\n');
+	return 0;
 }
