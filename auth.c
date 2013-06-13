@@ -18,20 +18,17 @@ int main(int argc, char **argv) {
 	char *t_secret = argv[5];
 
 	char *sig = oauth_sign_url2(url, NULL, OA_HMAC, "GET", c_key, c_secret, t_key, t_secret);
+	char *separator = "";
 
 	printf("Authorization: OAuth ");
-	int within = 0;
 
 	// Can't just use oauth_split_url_parameters() because it loses the last one (?!?)
 
-	char *s;
-	for (s = sig; *s != '\0'; s++) {
+	for (char *s = sig; *s; s++) {
 		if (*s == '?' || *s == '&') {
 			if (strncmp(s + 1, "oauth_", 6) == 0) {
-				if (within) {
-					printf(", ");
-				}
-				within = 1;
+				printf("%s", separator);
+				separator = ", ";
 
 				char *cp;
 				for (cp = s + 1; *cp && *cp != '&'; cp++) {
