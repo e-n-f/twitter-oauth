@@ -1,0 +1,22 @@
+#!/usr/bin/perl
+
+# from https://dev.twitter.com/apps
+# in particular https://dev.twitter.com/apps/*/show
+$consumerkey = "...";
+$consumersecret = "...";
+$accesstoken = "...";
+$accesstokensecret = "...";
+
+$url = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=twitterapi&count=2000";
+
+$auth = "";
+
+open(AUTH, "./auth '$url' $consumerkey $consumersecret $accesstoken $accesstokensecret |");
+
+while (<AUTH>) {
+	chomp;
+	$auth .= $_;
+}
+close(AUTH);
+
+system "curl --verbose --compress -s --header '$auth' '$url'";
