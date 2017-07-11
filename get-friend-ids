@@ -1,0 +1,8 @@
+#!/bin/sh
+
+url="https://api.twitter.com/1.1/friends/ids.json"
+auth="$(./auth "$url" $(cat keys))"
+
+echo "$auth" >&2
+
+curl --verbose --compress -s --header "$auth" "$url" > friend-ids.json
