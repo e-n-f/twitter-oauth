@@ -1,0 +1,11 @@
+#!/bin/sh
+
+cat friend-ids.json | sed 's/.*\[//' | sed 's/\].*//' | tr ',' '\012' | fmt -w 110 | tr ' ' ',' |
+while read id
+do
+	url="https://api.twitter.com/1.1/lists/members/create_all.json?slug=really-following&owner_screen_name=enf&user_id=$id"
+
+	auth="$(./auth -m POST "$url" $(cat keys2))"
+	echo "$auth"
+	curl -X POST --verbose --compress -s --header "$auth" "$url"
+done
