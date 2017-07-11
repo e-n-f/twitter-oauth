@@ -2,22 +2,40 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <unistd.h>
 #include <sys/time.h>
 #include <oauth.h>
 
 int main(int argc, char **argv) {
-	if (argc != 6) {
-		fprintf(stderr, "Usage: %s URL consumerkey consumersecret token tokensecret\n\n", argv[0]);
+	int i;
+	extern int optind;
+	extern char *optarg;
+	const char *method = "GET";
+
+	while ((i = getopt(argc, argv, "m:")) != -1) {
+		switch (i) {
+		case 'm':
+			method = optarg;
+			break;
+
+		default:
+			fprintf(stderr, "Unknown option %c\n", i);
+			exit(EXIT_FAILURE);
+		}
+	}
+
+	if (argc - optind != 5) {
+		fprintf(stderr, "Usage: %s [-m POST] URL consumerkey consumersecret token tokensecret\n\n", argv[0]);
 		exit(EXIT_FAILURE);
 	}
 
-	char *url = argv[1];
-	char *c_key = argv[2];
-	char *c_secret = argv[3];
-	char *t_key = argv[4];
-	char *t_secret = argv[5];
+	char *url = argv[optind];
+	char *c_key = argv[optind + 1];
+	char *c_secret = argv[optind + 2];
+	char *t_key = argv[optind + 3];
+	char *t_secret = argv[optind + 4];
 
-	char *sig = oauth_sign_url2(url, NULL, OA_HMAC, "GET", c_key, c_secret, t_key, t_secret);
+	char *sig = oauth_sign_url2(url, NULL, OA_HMAC, method, c_key, c_secret, t_key, t_secret);
 	char *separator = "";
 
 	printf("Authorization: OAuth ");
